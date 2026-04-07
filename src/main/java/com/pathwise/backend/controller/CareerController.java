@@ -1,27 +1,25 @@
 package com.pathwise.backend.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-
 import com.pathwise.backend.model.Career;
 import com.pathwise.backend.repository.CareerRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/careers")
+@RequestMapping("/careers")
+@CrossOrigin
 public class CareerController {
 
-    @Autowired
-    private CareerRepository repo;
+    private CareerRepository repository = new CareerRepository();
 
     @GetMapping
     public List<Career> getAll() {
-        return repo.findAll();
+        return repository.findAll();
     }
 
     @PostMapping
-    public Career add(@RequestBody Career c) {
-        return repo.save(c);
+    public Career create(@RequestBody Career career) {
+        return repository.save(career);
     }
 }

@@ -1,22 +1,34 @@
 package com.pathwise.backend.model;
 
-import jakarta.persistence.*;
-
-@Entity
 public class Mentor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-    private String field;
+    private String expertise;
 
-    public Long getId() { return id; }
+    public Mentor() {}
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getField() { return field; }
-    public void setField(String field) { this.field = field; }
+    public void setId(Long id) {   // ✅ REQUIRED
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getExpertise() {
+        return expertise;
+    }
+
+    public void setExpertise(String expertise) {
+        this.expertise = expertise;
+    }
 }

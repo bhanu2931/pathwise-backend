@@ -1,11 +1,34 @@
 package com.pathwise.backend.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import com.pathwise.backend.model.User;
+import java.util.*;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public class UserRepository {
 
-    User findByEmail(String email);
+    private List<User> users = new ArrayList<>();
+
+    public List<User> findAll() {
+        return users;
+    }
+
+    public User save(User user) {
+
+        if (user.getId() == null) {
+            user.setId((long) (users.size() + 1));
+        }
+
+        users.add(user);
+        return user;
+    }
+
+    public User findByEmail(String email) {
+
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+
+        return null;
+    }
 }

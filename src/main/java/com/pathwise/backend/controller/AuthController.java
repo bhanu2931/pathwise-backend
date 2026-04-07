@@ -1,30 +1,34 @@
 package com.pathwise.backend.controller;
+
 import com.pathwise.backend.model.User;
+import com.pathwise.backend.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@RequestMapping("/auth")
+@CrossOrigin
 public class AuthController {
 
-    private String savedEmail = "admin@gmail.com";
-    private String savedPassword = "1234";
+    private UserRepository userRepository = new UserRepository();
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
-        savedEmail = user.getEmail();
-        savedPassword = user.getPassword();
-        return "Registered Successfully";
+    public User register(@RequestBody User user) {
+        return userRepository.save(user);
     }
 
     @PostMapping("/login")
     public String login(@RequestBody User user) {
 
-        if (user.getEmail().equals(savedEmail) &&
-            user.getPassword().equals(savedPassword)) {
-            return "Login Success";
-        } else {
-            return "Invalid Credentials";
+        User existing = userRepository.findByEmail(user.getEmail());
+
+        if (existing == null) {
+            return "User not found";
         }
+
+        if (!existing.getPassword().equals(user.getPassword())) {
+            return "Invalid password";
+        }
+
+        return "Login successful";
     }
 }

@@ -1,22 +1,18 @@
 package com.pathwise.backend.model;
 
-import jakarta.persistence.*;
-
-@Entity
 public class Career {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private String description;
+
+    public Career() {}
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id) {   // ✅ REQUIRED
         this.id = id;
     }
 

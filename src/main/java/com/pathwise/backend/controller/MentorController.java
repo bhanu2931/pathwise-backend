@@ -1,30 +1,25 @@
 package com.pathwise.backend.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.pathwise.backend.model.Mentor;
 import com.pathwise.backend.repository.MentorRepository;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mentors")
-@CrossOrigin(origins = "*")
+@RequestMapping("/mentors")
+@CrossOrigin
 public class MentorController {
 
-    @Autowired
-    private MentorRepository repo;
+    private MentorRepository mentorRepository = new MentorRepository();
 
-    // GET ALL
     @GetMapping
-    public List<Mentor> getAll() {
-        return repo.findAll();
+    public List<Mentor> getAllMentors() {
+        return mentorRepository.findAll();
     }
 
-    // ADD (ADMIN)
     @PostMapping
-    public Mentor addMentor(@RequestBody Mentor m) {
-        return repo.save(m);
+    public Mentor addMentor(@RequestBody Mentor mentor) {
+        return mentorRepository.save(mentor);
     }
 }

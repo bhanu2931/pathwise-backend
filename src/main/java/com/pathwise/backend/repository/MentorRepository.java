@@ -1,7 +1,23 @@
 package com.pathwise.backend.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.pathwise.backend.model.Mentor;
+import java.util.*;
 
-public interface MentorRepository extends JpaRepository<Mentor, Long> {
+public class MentorRepository {
+
+    private List<Mentor> mentors = new ArrayList<>();
+
+    public List<Mentor> findAll() {
+        return mentors;
+    }
+
+    public Mentor save(Mentor mentor) {
+
+        if (mentor.getId() == null) {
+            mentor.setId((long) (mentors.size() + 1));
+        }
+
+        mentors.add(mentor);
+        return mentor;
+    }
 }
