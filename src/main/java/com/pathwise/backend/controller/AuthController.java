@@ -4,31 +4,49 @@ import com.pathwise.backend.model.User;
 import com.pathwise.backend.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class AuthController {
 
-    private UserRepository userRepository = new UserRepository();
+    private final UserRepository repo;
+
+    public AuthController(UserRepository repo) {
+        this.repo = repo;
+    }
 
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        return userRepository.save(user);
+    public String register(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+
+        if (repo.findByEmail(email).isPresent()) {
+            throw new RuntimeException("User already exists");
+        }
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+
+        repo.save(user);
+
+        return "User registered successfully";
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public String login(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
 
-        User existing = userRepository.findByEmail(user.getEmail());
+        User user = repo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (existing == null) {
-            return "User not found";
+        if (!user.getPassword().equals(password)) {
+            throw new RuntimeException("Invalid password");
         }
 
-        if (!existing.getPassword().equals(user.getPassword())) {
-            return "Invalid password";
-        }
-
-        return "Login successful";
+        return "token_" + email;
     }
 }

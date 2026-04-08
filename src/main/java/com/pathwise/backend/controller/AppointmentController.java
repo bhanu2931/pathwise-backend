@@ -8,18 +8,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/appointments")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class AppointmentController {
 
-    private AppointmentRepository repository = new AppointmentRepository();
+    private final AppointmentRepository repo;
 
-    @GetMapping
-    public List<Appointment> getAll() {
-        return repository.findAll();
+    public AppointmentController(AppointmentRepository repo) {
+        this.repo = repo;
     }
 
+    // ✅ BOOK SESSION
     @PostMapping
-    public Appointment create(@RequestBody Appointment appointment) {
-        return repository.save(appointment);
+    public Appointment book(@RequestBody Appointment appointment) {
+        return repo.save(appointment);
+    }
+
+    // ✅ GET ALL BOOKINGS
+    @GetMapping
+    public List<Appointment> getAll() {
+        return repo.findAll();
     }
 }

@@ -1,9 +1,16 @@
 package com.pathwise.backend.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "appointments")
 public class Appointment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
+    private String mentorName;
     private String date;
     private String time;
 
@@ -13,16 +20,12 @@ public class Appointment {
         return id;
     }
 
-    public void setId(Long id) {   // ✅ REQUIRED
-        this.id = id;
+    public String getMentorName() {
+        return mentorName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setMentorName(String mentorName) {
+        this.mentorName = mentorName;
     }
 
     public String getDate() {
