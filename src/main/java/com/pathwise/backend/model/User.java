@@ -3,18 +3,23 @@ package com.pathwise.backend.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "users") // ✅ VERY IMPORTANT (fixes MySQL issue)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
+    // ✅ Default constructor
     public User() {}
+
+    // ✅ Getters & Setters
 
     public Long getId() {
         return id;

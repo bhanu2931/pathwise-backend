@@ -4,6 +4,8 @@ import com.pathwise.backend.model.User;
 import com.pathwise.backend.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,13 +19,19 @@ public class AuthController {
         this.repo = repo;
     }
 
+    /* ================= REGISTER ================= */
+
     @PostMapping("/register")
-    public String register(@RequestBody Map<String, String> body) {
+    public Object register(@RequestBody Map<String, String> body) {
+
         String email = body.get("email");
         String password = body.get("password");
 
+        Map<String, Object> response = new HashMap<>();
+
         if (repo.findByEmail(email).isPresent()) {
-            throw new RuntimeException("User already exists");
+            response.put("message", "User already exists");
+            return response;
         }
 
         User user = new User();
@@ -32,21 +40,43 @@ public class AuthController {
 
         repo.save(user);
 
-        return "User registered successfully";
+        response.put("message", "User registered successfully");
+        return response;
     }
 
+    /* ================= LOGIN ================= */
+
     @PostMapping("/login")
-    public String login(@RequestBody Map<String, String> body) {
+    public Object login(@RequestBody Map<String, String> body) {
+
         String email = body.get("email");
         String password = body.get("password");
 
-        User user = repo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        Map<String, Object> response = new HashMap<>();
 
-        if (!user.getPassword().equals(password)) {
-            throw new RuntimeException("Invalid password");
+        User user = repo.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            response.put("message", "User not found");
+            return response;
         }
 
-        return "token_" + email;
+        if (!user.getPassword().equals(password)) {
+            response.put("message", "Invalid password");
+            return response;
+        }
+
+        // ✅ SUCCESS LOGIN
+        response.put("token", "token_" + email);
+        response.put("email", email);
+
+        return response;
+    }
+
+    /* ================= GET ALL USERS (POSTMAN) ================= */
+
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return repo.findAll();
     }
 }
