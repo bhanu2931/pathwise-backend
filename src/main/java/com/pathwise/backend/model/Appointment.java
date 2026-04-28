@@ -10,37 +10,24 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String mentorName;
+    private String mentor;
     private String date;
     private String time;
+    private String userEmail;
 
     public Appointment() {}
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public String getMentorName() {
-        return mentorName;
-    }
+    public String getMentor() { return mentor; }
+    public void setMentor(String mentor) { this.mentor = mentor; }
 
-    public void setMentorName(String mentorName) {
-        this.mentorName = mentorName;
-    }
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
 
-    public String getDate() {
-        return date;
-    }
+    public String getTime() { return time; }
+    public void setTime(String time) { this.time = time; }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
 }

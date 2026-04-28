@@ -2,12 +2,14 @@ package com.pathwise.backend.controller;
 
 import com.pathwise.backend.model.Appointment;
 import com.pathwise.backend.repository.AppointmentRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/appointments")
+@RequestMapping("/api/appointments")
 @CrossOrigin(origins = "*")
 public class AppointmentController {
 
@@ -18,14 +20,27 @@ public class AppointmentController {
     }
 
     // ✅ BOOK SESSION
-    @PostMapping
-    public Appointment book(@RequestBody Appointment appointment) {
-        return repo.save(appointment);
+    @PostMapping("/book")
+    public ResponseEntity<?> book(@RequestBody Appointment appointment) {
+
+        Map<String, Object> res = new HashMap<>();
+
+        try {
+            repo.save(appointment);
+
+            res.put("message", "Session booked successfully");
+            return ResponseEntity.ok(res);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            res.put("message", "Error: " + e.getMessage());
+            return ResponseEntity.status(500).body(res);
+        }
     }
 
-    // ✅ GET ALL BOOKINGS
-    @GetMapping
-    public List<Appointment> getAll() {
-        return repo.findAll();
+    // ✅ GET ALL BOOKINGS (for demo)
+    @GetMapping("/all")
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(repo.findAll());
     }
 }
